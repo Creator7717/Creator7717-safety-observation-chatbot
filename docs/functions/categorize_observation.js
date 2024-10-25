@@ -1,7 +1,10 @@
+// categorize_observation.js
+
 const fetch = require('node-fetch');
-require('dotenv').config();
+const categoriesData = require('./categories.json');
 
 exports.handler = async function(event, context) {
+  // Parse the observation from the request body
   const { observation } = JSON.parse(event.body);
 
   if (!observation) {
@@ -14,10 +17,37 @@ exports.handler = async function(event, context) {
   // Your OpenAI API key
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
-  // The prompt and categories would be similar to the ones used earlier
-  const prompt = `Given the following safety observation: "${observation}", identify the most appropriate category, subcategory, and item from the provided list.\n\nCategories:\n...`; // Include your categories here
+  // Convert categories JSON to text format
+  function categoriesToText(categories) {
+    let text = '';
+    categories.forEach(category => {
+      text += `- ${category.code}: ${category.name}\n`;
+      category.subcategories.forEach(subcategory => {
+        text += `  - ${subcategory.code}: ${subcategory.name}\n`;
+        subcategory.items.forEach(item => {
+          text += `    - ${item.code}: ${item.name}\n`;
+        });
+      });
+    });
+    return text;
+  }
+
+  // Generate the categories text
+  const categoriesText = categoriesToText(categoriesData.categories);
+
+  // Prepare the prompt for OpenAI
+  const prompt = `
+Given the following safety observation: "${observation}", identify the most appropriate category, subcategory, and item from the provided list.
+
+Categories:
+${categoriesText}
+
+Respond with the codes and names in the following format:
+Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code - Item Name.
+`;
 
   try {
+    // Call the OpenAI API
     const response = await fetch('https://api.openai.com/v1/completions', {
       method: 'POST',
       headers: {
@@ -41,11 +71,18 @@ exports.handler = async function(event, context) {
       };
     }
 
-    const result = data.choices[0].text.trim();
+    const resultText = data.choices[0].text.trim();
+
+    // Optionally, parse the result to a structured format
+    const parsedResult = parseResult(resultText);
 
     return {
       statusCode: 200,
-      body: JSON.stringify({ result })
+      headers: {
+        'Access-Control-Allow-Origin': '*', // Adjust as necessary
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ result: parsedResult })
     };
   } catch (error) {
     console.error('Error:', error);
@@ -55,3 +92,30 @@ exports.handler = async function(event, context) {
     };
   }
 };
+
+// Function to parse the OpenAI response into structured data
+function parseResult(resultText) {
+  // Expected format:
+  // Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code - Item Name
+
+  const parts = resultText.split('>');
+  if (parts.length === 3) {
+    const [categoryPart, subcategoryPart, itemPart] = parts.map(part => part.trim());
+
+    const [categoryCode, categoryName] = categoryPart.split('-', 2).map(str => str.trim());
+    const [subcategoryCode, subcategoryName] = subcategoryPart.split('-', 2).map(str => str.trim());
+    const [itemCode, itemName] = itemPart.split('-', 2).map(str => str.trim());
+
+    return {
+      categoryCode,
+      categoryName,
+      subcategoryCode,
+      subcategoryName,
+      itemCode,
+      itemName
+    };
+  } else {
+    // If the format is unexpected, return the raw text
+    return { rawResult: resultText };
+  }
+}
