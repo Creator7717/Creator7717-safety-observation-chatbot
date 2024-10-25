@@ -10,13 +10,14 @@ document.getElementById('submit').addEventListener('click', async () => {
   responseDiv.textContent = 'Categorizing...';
 
   try {
-    const response = await fetch('YOUR_SERVERLESS_FUNCTION_URL', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ observation })
-    });
+ const response = await fetch('https://safety-observation-app.netlify.app/.netlify/functions/categorize_observation', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({ observation })
+});
+
 
     const data = await response.json();
 
