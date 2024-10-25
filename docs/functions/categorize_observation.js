@@ -1,16 +1,31 @@
-// categorize_observation.js
-
 const fetch = require('node-fetch');
 const categoriesData = require('./categories.json');
 
 exports.handler = async function(event, context) {
+  // Add CORS headers to the response
+  const headers = {
+    'Access-Control-Allow-Origin': 'https://creator7717.github.io', // Replace with your GitHub Pages URL
+    'Access-Control-Allow-Headers': 'Content-Type',
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  };
+
+  // Handle preflight OPTIONS request
+  if (event.httpMethod === 'OPTIONS') {
+    return {
+      statusCode: 200,
+      headers,
+      body: 'OK',
+    };
+  }
+
   // Parse the observation from the request body
   const { observation } = JSON.parse(event.body);
 
   if (!observation) {
     return {
       statusCode: 400,
-      body: JSON.stringify({ error: 'No observation provided.' })
+      headers,
+      body: JSON.stringify({ error: 'No observation provided.' }),
     };
   }
 
@@ -32,7 +47,6 @@ exports.handler = async function(event, context) {
     return text;
   }
 
-  // Generate the categories text
   const categoriesText = categoriesToText(categoriesData.categories);
 
   // Prepare the prompt for OpenAI
@@ -67,27 +81,26 @@ Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code 
     if (data.error) {
       return {
         statusCode: 500,
+        headers,
         body: JSON.stringify({ error: data.error.message })
       };
     }
 
     const resultText = data.choices[0].text.trim();
 
-    // Optionally, parse the result to a structured format
+    // Parse the result
     const parsedResult = parseResult(resultText);
 
     return {
       statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*', // Adjust as necessary
-        'Content-Type': 'application/json'
-      },
+      headers,
       body: JSON.stringify({ result: parsedResult })
     };
   } catch (error) {
     console.error('Error:', error);
     return {
       statusCode: 500,
+      headers,
       body: JSON.stringify({ error: 'An error occurred while processing your observation.' })
     };
   }
@@ -119,3 +132,4 @@ function parseResult(resultText) {
     return { rawResult: resultText };
   }
 }
+
