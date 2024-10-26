@@ -65,15 +65,13 @@ exports.handler = async function(event, context) {
   const categoriesText = categoriesToText(categoriesData.categories);
 
   // Prepare the prompt for OpenAI
-  const prompt = 
-Given the following safety observation: "${observation}", identify the most appropriate category, subcategory, and item from the provided list.
+  const prompt = Given the following safety observation: "${observation}", identify the most appropriate category, subcategory, and item from the provided list.
 
 Categories:
 ${categoriesText}
 
 Respond with the codes and names in the following format:
-Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code - Item Name.
-;
+Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code - Item Name.;
 
   try {
     // Call the OpenAI API
