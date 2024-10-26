@@ -4,7 +4,7 @@ const categoriesData = require('./categories.json');
 exports.handler = async function(event, context) {
   // Define the CORS headers
   const headers = {
-    'Access-Control-Allow-Origin': 'https://creator7717.github.io', // Replace with your GitHub Pages URL
+    'Access-Control-Allow-Origin': 'https://creator7717.github.io/Creator7717-safety-observation-chatbot/', // Replace with your GitHub Pages URL
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
   };
