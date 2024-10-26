@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const categoriesData = require('./categories.json');
  
 exports.handler = async function(event, context) {
-  // Add CORS headers to the response
+  // Define the CORS headers
   const headers = {
     'Access-Control-Allow-Origin': 'https://creator7717.github.io', // Replace with your GitHub Pages URL
     'Access-Control-Allow-Headers': 'Content-Type',
@@ -133,4 +133,3 @@ function parseResult(resultText) {
   }
 }
  
-
