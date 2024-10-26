@@ -4,6 +4,8 @@
   "description": "Netlify Functions",
   "main": "categorize_observation.js",
   "dependencies": {
-    "node-fetch": "^2.6.7"
+    "node-fetch": "^2.6.7",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7"
   }
 }
