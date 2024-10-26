@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 const categoriesData = require('./categories.json');
-
+ 
 exports.handler = async function(event, context) {
   // Add CORS headers to the response
   const headers = {
@@ -8,8 +8,8 @@ exports.handler = async function(event, context) {
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
   };
-
-  // Handle preflight OPTIONS request
+ 
+  // Handle preflight OPTIONS request for CORS
   if (event.httpMethod === 'OPTIONS') {
     return {
       statusCode: 200,
@@ -17,10 +17,10 @@ exports.handler = async function(event, context) {
       body: 'OK',
     };
   }
-
+ 
   // Parse the observation from the request body
   const { observation } = JSON.parse(event.body);
-
+ 
   if (!observation) {
     return {
       statusCode: 400,
@@ -28,11 +28,11 @@ exports.handler = async function(event, context) {
       body: JSON.stringify({ error: 'No observation provided.' }),
     };
   }
-
+ 
   // Your OpenAI API key
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
-
-  // Convert categories JSON to text format
+ 
+  // Convert categories JSON to text format for prompt
   function categoriesToText(categories) {
     let text = '';
     categories.forEach(category => {
@@ -46,20 +46,20 @@ exports.handler = async function(event, context) {
     });
     return text;
   }
-
+ 
   const categoriesText = categoriesToText(categoriesData.categories);
-
+ 
   // Prepare the prompt for OpenAI
   const prompt = `
 Given the following safety observation: "${observation}", identify the most appropriate category, subcategory, and item from the provided list.
-
+ 
 Categories:
 ${categoriesText}
-
+ 
 Respond with the codes and names in the following format:
 Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code - Item Name.
 `;
-
+ 
   try {
     // Call the OpenAI API
     const response = await fetch('https://api.openai.com/v1/completions', {
@@ -75,9 +75,9 @@ Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code 
         temperature: 0
       })
     });
-
+ 
     const data = await response.json();
-
+ 
     if (data.error) {
       return {
         statusCode: 500,
@@ -85,12 +85,12 @@ Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code 
         body: JSON.stringify({ error: data.error.message })
       };
     }
-
+ 
     const resultText = data.choices[0].text.trim();
-
-    // Parse the result
+ 
+    // Parse the result into structured data
     const parsedResult = parseResult(resultText);
-
+ 
     return {
       statusCode: 200,
       headers,
@@ -105,20 +105,20 @@ Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code 
     };
   }
 };
-
+ 
 // Function to parse the OpenAI response into structured data
 function parseResult(resultText) {
   // Expected format:
   // Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code - Item Name
-
+ 
   const parts = resultText.split('>');
   if (parts.length === 3) {
     const [categoryPart, subcategoryPart, itemPart] = parts.map(part => part.trim());
-
+ 
     const [categoryCode, categoryName] = categoryPart.split('-', 2).map(str => str.trim());
     const [subcategoryCode, subcategoryName] = subcategoryPart.split('-', 2).map(str => str.trim());
     const [itemCode, itemName] = itemPart.split('-', 2).map(str => str.trim());
-
+ 
     return {
       categoryCode,
       categoryName,
@@ -132,4 +132,5 @@ function parseResult(resultText) {
     return { rawResult: resultText };
   }
 }
+ 
 
