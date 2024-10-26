@@ -1,13 +1,9 @@
 // categorize_observation.js
 
 const fetch = require('node-fetch');
-const fs = require('fs');
-const path = require('path');
 
 // Read categories from JSON file
-const categoriesData = JSON.parse(
-  fs.readFileSync(path.join(__dirname, 'categories.json'), 'utf8')
-);
+const categoriesData = require('./categories.json');
 
 exports.handler = async function(event, context) {
   // Set CORS headers for all responses
@@ -137,6 +133,7 @@ function parseResult(resultText) {
     const [categoryCode, categoryName] = categoryPart.split('-', 2).map(str => str.trim());
     const [subcategoryCode, subcategoryName] = subcategoryPart.split('-', 2).map(str => str.trim());
     const [itemCode, itemName] = itemPart.split('-', 2).map(str => str.trim());
+
     return {
       categoryCode,
       categoryName,
