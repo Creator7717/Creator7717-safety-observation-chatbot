@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       // Send the observation to your serverless function
-      const response = await fetch('https://enablonobservation.netlify.app/.netlify/functions/categorize_observation', {
+      const response = await fetch('https://enablonobservation.netlify.app/.netlify/functions/categorize_observation.js', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
