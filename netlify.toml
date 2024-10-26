@@ -1,2 +1,6 @@
-[build]
-  functions = "functions"
+[functions]
+  node_bundler = "esbuild"
+
+[functions.categorize_observation]
+  node_bundler = "esbuild"
+  external_node_modules = ["node-fetch"]
