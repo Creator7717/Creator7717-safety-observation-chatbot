@@ -2,9 +2,6 @@
 
 const fetch = require('node-fetch');
 
-// Read categories from JSON file
-const categoriesData = require('./categories.json');
-
 exports.handler = async function(event, context) {
   // Set CORS headers for all responses
   const headers = {
@@ -47,6 +44,44 @@ exports.handler = async function(event, context) {
   // Your OpenAI API key
   const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
 
+  // Categories data embedded directly in the code
+  const categoriesData = {
+    "categories": [
+      {
+        "code": "3a",
+        "name": "Plant Upkeep",
+        "subcategories": [
+          {
+            "code": "3a.1",
+            "name": "Leakage",
+            "items": [
+              { "code": "3a.1.1", "name": "Air" },
+              { "code": "3a.1.2", "name": "Oil" },
+              { "code": "3a.1.3", "name": "Water" },
+              { "code": "3a.1.4", "name": "Steam" },
+              { "code": "3a.1.5", "name": "Chemical" },
+              { "code": "3a.1.6", "name": "Gas" },
+              { "code": "3a.1.7", "name": "Polymer" }
+            ]
+          },
+          {
+            "code": "3a.2",
+            "name": "Spillage",
+            "items": [
+              { "code": "3a.2.1", "name": "Raw Material" },
+              { "code": "3a.2.2", "name": "Product" },
+              { "code": "3a.2.3", "name": "Waste" },
+              { "code": "3a.2.4", "name": "Oil" },
+              { "code": "3a.2.5", "name": "Chemical" }
+            ]
+          },
+          // Include all other subcategories and items...
+        ]
+      },
+      // Include all other categories...
+    ]
+  };
+
   // Convert categories JSON to text format
   function categoriesToText(categories) {
     let text = '';
@@ -65,13 +100,15 @@ exports.handler = async function(event, context) {
   const categoriesText = categoriesToText(categoriesData.categories);
 
   // Prepare the prompt for OpenAI
-  const prompt = Given the following safety observation: "${observation}", identify the most appropriate category, subcategory, and item from the provided list.
+  const prompt = 
+Given the following safety observation: "${observation}", identify the most appropriate category, subcategory, and item from the provided list.
 
 Categories:
 ${categoriesText}
 
 Respond with the codes and names in the following format:
-Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code - Item Name.;
+Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code - Item Name.
+;
 
   try {
     // Call the OpenAI API
@@ -103,8 +140,7 @@ Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code 
 
     // Parse the result
     const parsedResult = parseResult(resultText);
-
-    return {
+return {
       statusCode: 200,
       headers,
       body: JSON.stringify({ result: parsedResult })
