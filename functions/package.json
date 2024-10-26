@@ -1,0 +1,9 @@
+{
+  "name": "functions",
+  "version": "1.0.0",
+  "description": "Netlify Functions",
+  "main": "categorize_observation.js",
+  "dependencies": {
+    "node-fetch": "^2.6.7"
+  }
+}
