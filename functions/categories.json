@@ -306,10 +306,5 @@
             {"code": "3f.1.12", "name": "Exposure to Chemical/Gas", "keywords": ["chemical exposure", "gas exposure"]}
           ]
         },
-        // Continue adding the rest of the subcategories and items for "Procedures"
-        // Due to space limitations, I'll proceed to explain how you can continue.
-      ]
-    }
-    // Continue adding the rest of the categories provided
   ]
 }
