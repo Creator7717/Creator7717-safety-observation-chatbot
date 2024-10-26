@@ -1,5 +1,6 @@
 // app.js
 
+// Wait for the DOM to load
 document.addEventListener('DOMContentLoaded', () => {
   // Get references to HTML elements
   const observationInput = document.getElementById('observation');
@@ -41,14 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (result.rawResult) {
           // If the result couldn't be parsed, display the raw result
-          responseDiv.textContent = Categorization Result:\n${result.rawResult};
+          responseDiv.textContent = `Categorization Result:\n${result.rawResult}`;
         } else {
           // Display the structured categorization
-          responseDiv.textContent = The observation falls under:\nCategory: ${result.categoryCode} - ${result.categoryName}\nSubcategory: ${result.subcategoryCode} - ${result.subcategoryName}\nItem: ${result.itemCode} - ${result.itemName};
+          responseDiv.textContent = `The observation falls under:\nCategory: ${result.categoryCode} - ${result.categoryName}\nSubcategory: ${result.subcategoryCode} - ${result.subcategoryName}\nItem: ${result.itemCode} - ${result.itemName}`;
         }
       } else {
         // Display an error message
-        responseDiv.textContent = Error: ${data.error};
+        responseDiv.textContent = `Error: ${data.error}`;
       }
     } catch (error) {
       console.error('Error:', error);
@@ -56,3 +57,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+
