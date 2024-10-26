@@ -1,8 +1,8 @@
-// categorize_observation.js
+// categorize_observation.mjs
 
-const fetch = require('node-fetch');
+import fetch from 'node-fetch';
 
-exports.handler = async function(event, context) {
+export const handler = async (event, context) => {
   // Set CORS headers for all responses
   const headers = {
     'Access-Control-Allow-Origin': 'https://creator7717.github.io',
@@ -140,7 +140,7 @@ Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code 
 
     // Parse the result
     const parsedResult = parseResult(resultText);
-return {
+    return {
       statusCode: 200,
       headers,
       body: JSON.stringify({ result: parsedResult })
