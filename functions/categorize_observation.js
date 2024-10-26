@@ -1,11 +1,11 @@
-// categorize_observation.mjs
+// functions/categorize_observation.js
 
-import fetch from 'node-fetch';
+// No need to require 'node-fetch' as Node.js 18+ has a built-in fetch
 
-export const handler = async (event, context) => {
+module.exports.handler = async function(event, context) {
   // Set CORS headers for all responses
   const headers = {
-    'Access-Control-Allow-Origin': 'https://creator7717.github.io',
+    'Access-Control-Allow-Origin': 'https://creator7717.github.io', // Replace with your actual frontend URL
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'POST, OPTIONS',
     'Content-Type': 'application/json'
@@ -111,7 +111,7 @@ Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code 
 ;
 
   try {
-    // Call the OpenAI API
+    // Call the OpenAI API using built-in fetch
     const response = await fetch('https://api.openai.com/v1/completions', {
       method: 'POST',
       headers: {
@@ -140,7 +140,7 @@ Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code 
 
     // Parse the result
     const parsedResult = parseResult(resultText);
-    return {
+return {
       statusCode: 200,
       headers,
       body: JSON.stringify({ result: parsedResult })
