@@ -1,6 +1,6 @@
 // api/categorize_observation.js
 
-export default async function handler(request, response) {
+module.exports = async function handler(request, response) {
   // Set CORS headers
   response.setHeader('Access-Control-Allow-Origin', 'https://creator7717.github.io');
   response.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
@@ -117,7 +117,7 @@ Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code 
     console.error('Error:', error);
     return response.status(500).json({ error: 'An error occurred while processing your observation.' });
   }
-}
+};
 
 // Function to parse the OpenAI response into structured data
 function parseResult(resultText) {
