@@ -106,7 +106,7 @@ Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code 
         'Authorization': `Bearer ${OPENAI_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'gpt-4o',
+        model: 'gpt-4-turbo',
         prompt: prompt,
         max_tokens: 150,
         temperature: 0
