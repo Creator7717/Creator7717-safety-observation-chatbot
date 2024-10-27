@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (result.rawResult) {
           // If the result couldn't be parsed, display the raw result
-          responseDiv.textContent = Categorization Result:\n${result.rawResult};
+          responseDiv.textContent = `Categorization Result:\n${result.rawResult}`;s
         } else {
           // Display the structured categorization
           responseDiv.textContent = The observation falls under:\nCategory: ${result.categoryCode} - ${result.categoryName}\nSubcategory: ${result.subcategoryCode} - ${result.subcategoryName}\nItem: ${result.itemCode} - ${result.itemName};
