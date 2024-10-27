@@ -3,185 +3,241 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Safety Observation Categorizer Chatbot</title>
+  <title>Safety Observation Categorizer</title>
   
-  <!-- Bootstrap CSS -->
-  <link
-    href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-    rel="stylesheet"
-    id="bootstrap-css"
-  />
-  <link
-    rel="stylesheet"
-    href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
-    integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
-    crossorigin="anonymous"
-  />
+  <!-- Google Fonts for Clean Typography -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
   
-  <!-- Custom CSS -->
+  <!-- CSS Styling -->
   <style>
-    body, html{
-      height: 100%;
+    /* Reset some default styles */
+    * {
       margin: 0;
-      background: rgb(44, 47, 59);
-      background: -webkit-linear-gradient(to right, rgb(40, 59, 34), rgb(54, 60, 70), rgb(32, 32, 43));
-      background: linear-gradient(to right, rgb(38, 51, 61), rgb(50, 55, 65), rgb(33, 33, 78));
+      padding: 0;
+      box-sizing: border-box;
     }
  
-    .chat{
-      margin-top: auto;
-      margin-bottom: auto;
-    }
-    .card{
-      height: 600px;
-      border-radius: 15px !important;
-      background-color: rgba(0,0,0,0.4) !important;
-    }
-    .msg_card_body{
-      overflow-y: auto;
+    /* Body Styling */
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #001f3f; /* Dark Blue Background */
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 20px;
     }
-    .card-header{
-      border-radius: 15px 15px 0 0 !important;
-      border-bottom: 0 !important;
-      background-color: #007bff;
-      color: white;
+ 
+    /* Container Styling */
+    .container {
+      background-color: #002746; /* Slightly Lighter Dark Blue */
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      max-width: 600px;
+      width: 100%;
     }
-    .card-footer{
-      border-radius: 0 0 15px 15px !important;
-      border-top: 0 !important;
-      background-color: #007bff;
+ 
+    /* Header Styling */
+    .container h1 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-size: 2em;
+      color: #ffffff;
     }
-    .type_msg{
-      background-color: rgba(0,0,0,0.3) !important;
-      border:0 !important;
-      color:white !important;
-      height: 60px !important;
-      overflow-y: auto;
-      border-radius: 15px;
-      padding: 10px;
-      resize: none;
+ 
+    /* Form Styling */
+    form {
+      display: flex;
+      flex-direction: column;
     }
-    .type_msg:focus{
-      box-shadow:none !important;
-      outline:0px !important;
+ 
+    label {
+      margin-bottom: 10px;
+      font-weight: 700;
+      font-size: 1.1em;
     }
-    .send_btn{
-      border-radius: 0 15px 15px 0 !important;
-      background-color: rgba(0,0,0,0.3) !important;
-      border:0 !important;
-      color: white !important;
+ 
+    textarea {
+      padding: 15px;
+      border: none;
+      border-radius: 4px;
+      resize: vertical;
+      min-height: 120px;
+      font-size: 1em;
+      margin-bottom: 20px;
+      outline: none;
+      font-family: 'Roboto', sans-serif;
+    }
+ 
+    textarea:focus {
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.5);
+    }
+ 
+    button {
+      padding: 12px 20px;
+      background-color: #007bff; /* Bright Blue */
+      color: #ffffff;
+      border: none;
+      border-radius: 4px;
+      font-size: 1em;
       cursor: pointer;
-      padding: 0 20px;
+      transition: background-color 0.3s ease;
+      font-weight: 700;
     }
-    .send_btn:hover{
-      background-color: #0056b3;
+ 
+    button:hover {
+      background-color: #0056b3; /* Darker Blue on Hover */
     }
-    .msg_cotainer{
-      margin-top: auto;
-      margin-bottom: auto;
-      margin-left: 10px;
-      border-radius: 25px;
-      background-color: rgb(82, 172, 255);
-      padding: 10px;
-      position: relative;
-      color: black;
-    }
-    .msg_cotainer_send{
-      margin-top: auto;
-      margin-bottom: auto;
-      margin-right: 10px;
-      border-radius: 25px;
-      background-color: #58cc71;
-      padding: 10px;
-      position: relative;
-      color: white;
-    }
-    .msg_time{
-      position: absolute;
-      left: 0;
-      bottom: -15px;
-      color: rgba(255,255,255,0.5);
-      font-size: 10px;
-    }
-    .msg_time_send{
-      position: absolute;
-      right:0;
-      bottom: -15px;
-      color: rgba(255,255,255,0.5);
-      font-size: 10px;
-    }
-    #loading, #error, #result {
-      margin-top: 10px;
-      font-size: 0.9em;
-    }
+ 
+    /* Loading Indicator Styling */
     #loading {
-      color: #ffc107; /* Amber */
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+      font-size: 1.1em;
+      color: #ffc107; /* Amber Color */
     }
-    #error {
-      color: #ff4d4f; /* Red */
-    }
+ 
+    /* Result Styling */
     #result {
-      color: #28a745; /* Green */
+      display: none;
+      background-color: #003366; /* Darker Blue for Result */
+      padding: 20px;
+      border-radius: 4px;
+      margin-top: 20px;
+      font-size: 1em;
     }
-    @media(max-width: 576px){
-      .card{
-        height: 90vh;
+ 
+    #result strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+    }
+ 
+    /* Error Message Styling */
+    #error {
+      display: none;
+      background-color: #ff4d4f; /* Red for Errors */
+      padding: 15px;
+      border-radius: 4px;
+      margin-top: 20px;
+      font-size: 1em;
+    }
+ 
+    /* Responsive Design */
+    @media (max-width: 600px) {
+      .container {
+        padding: 20px;
+      }
+ 
+      .container h1 {
+        font-size: 1.5em;
+      }
+ 
+      button {
+        font-size: 0.9em;
       }
     }
   </style>
 </head>
- 
 <body>
-  <div class="container-fluid h-100">
-    <div class="row justify-content-center h-100">
-      <div class="col-md-8 col-xl-6 chat">
-        <div class="card">
-          <div class="card-header msg_head">
-            <div class="d-flex bd-highlight">
-              <div class="img_cont">
-                <img
-                  src="https://i.ibb.co/fSNP7Rz/icons8-chatgpt-512.png"
-                  class="rounded-circle user_img"
-                />
-                <span class="online_icon"></span>
-              </div>
-              <div class="user_info">
-                <span>Safety Observation ChatBot</span>
-                <p>Categorize your safety observations</p>
-              </div>
-            </div>
-          </div>
-          <div id="messageFormeight" class="card-body msg_card_body">
-            <!-- Messages and results will appear here -->
-          </div>
-          <div class="card-footer">
-            <form id="observationForm" class="input-group">
-              <textarea
-                id="observation"
-                name="observation"
-                placeholder="Describe your safety observation..."
-                class="form-control type_msg"
-                required
-              ></textarea>
-              <div class="input-group-append">
-                <button
-                  type="submit"
-                  class="input-group-text send_btn"
-                >
-                  <i class="fas fa-location-arrow"></i>
-                </button>
-              </div>
-            </form>
-            <div id="loading" class="text-center">Processing your observation...</div>
-            <div id="result" class="text-center"></div>
-            <div id="error" class="text-center"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="container">
+    <h1>Safety Observation Categorizer</h1>
+    <form id="observationForm">
+      <label for="observation">Enter Your Safety Observation:</label>
+      <textarea id="observation" name="observation" placeholder="Describe the safety observation here..." required></textarea>
+      <button type="submit">Categorize</button>
+    </form>
+ 
+    <div id="loading">Processing your observation...</div>
+ 
+    <div id="result"></div>
+    <div id="error"></div>
   </div>
  
-  <!-- jQuery and Bootstrap JS -->
-  
+  <!-- JavaScript for Form Handling -->
+  <script>
+    document.getElementById('observationForm').addEventListener('submit', async function(event) {
+      event.preventDefault(); // Prevent default form submission
+ 
+      // Get elements
+      const observationInput = document.getElementById('observation');
+      const loadingDiv = document.getElementById('loading');
+      const resultDiv = document.getElementById('result');
+      const errorDiv = document.getElementById('error');
+ 
+      // Clear previous messages
+      resultDiv.style.display = 'none';
+      errorDiv.style.display = 'none';
+      resultDiv.innerHTML = '';
+      errorDiv.innerHTML = '';
+ 
+      // Get observation text
+      const observation = observationInput.value.trim();
+ 
+      // Validate input
+      if (!observation) {
+        errorDiv.style.display = 'block';
+        errorDiv.textContent = 'Please enter a safety observation.';
+        return;
+      }
+ 
+      // Show loading indicator
+      loadingDiv.style.display = 'block';
+ 
+      try {
+        // Replace with your actual Netlify function URL
+        const functionUrl = 'https://creator7717-safety-observation-chatbot.vercel.app/api/categorize_observation';
+ 
+        // Send POST request to the serverless function
+        const response = await fetch(functionUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ observation })
+        });
+ 
+        // Parse JSON response
+        const data = await response.json();
+ 
+        // Hide loading indicator
+        loadingDiv.style.display = 'none';
+ 
+        if (response.ok) {
+          const { result } = data;
+ 
+          if (result.rawResult) {
+            // Display raw result if parsing failed
+            resultDiv.innerHTML = `<strong>Raw Result:</strong> ${result.rawResult}`;
+          } else {
+            // Display structured result
+            resultDiv.innerHTML = `
+              <strong>Category:</strong> ${result.categoryCode} - ${result.categoryName}<br>
+              <strong>Subcategory:</strong> ${result.subcategoryCode} - ${result.subcategoryName}<br>
+              <strong>Item:</strong> ${result.itemCode} - ${result.itemName}
+            `;
+          }
+ 
+          resultDiv.style.display = 'block';
+        } else {
+          // Display error message from server
+          errorDiv.style.display = 'block';
+          errorDiv.textContent = data.error || 'An unexpected error occurred.';
+        }
+      } catch (error) {
+        // Hide loading indicator
+        loadingDiv.style.display = 'none';
+ 
+        // Display generic error message
+        errorDiv.style.display = 'block';
+        errorDiv.textContent = 'Failed to communicate with the server. Please try again later.';
+        console.error('Error:', error);
+      }
+    });
+  </script>
+</body>
+</html>
  
