@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
       // Send the observation to your serverless function
-      const response = await fetch('https://creator7717-safety-observation-chatbot.vercel.app/categorize_observation', {
+      const response = await fetch('https://creator7717-safety-observation-chatbot.vercel.app/api/categorize_observation', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
