@@ -2,7 +2,7 @@
  
 module.exports = async function handler(request, response) {
   // Set CORS headers
-  response.setHeader('Access-Control-Allow-Origin', 'https://creator7717.github.io');
+  response.setHeader('Access-Control-Allow-Origin', 'https://creator7717.github.io'); // Update this to your frontend domain
   response.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   response.setHeader('Access-Control-Allow-Headers', 'Content-Type');
  
@@ -51,17 +51,6 @@ module.exports = async function handler(request, response) {
               { "code": "3a.1.7", "name": "Polymer" }
             ]
           },
-          {
-            "code": "3a.2",
-            "name": "Spillage",
-            "items": [
-              { "code": "3a.2.1", "name": "Raw Material" },
-              { "code": "3a.2.2", "name": "Product" },
-              { "code": "3a.2.3", "name": "Waste" },
-              { "code": "3a.2.4", "name": "Oil" },
-              { "code": "3a.2.5", "name": "Chemical" }
-            ]
-          },
           // Include all other subcategories and items...
         ]
       },
@@ -86,8 +75,15 @@ module.exports = async function handler(request, response) {
  
   const categoriesText = categoriesToText(categoriesData.categories);
  
-  // Prepare the prompt for OpenAI
-  const prompt = `
+  // Prepare the messages for OpenAI Chat Completion
+  const messages = [
+    {
+      "role": "system",
+      "content": `You are an assistant that categorizes safety observations into predefined categories, subcategories, and items based on the provided list.`
+    },
+    {
+      "role": "user",
+      "content": `
 Given the following safety observation: "${observation}", identify the most appropriate category, subcategory, and item from the provided list.
  
 Categories:
@@ -95,19 +91,21 @@ ${categoriesText}
  
 Respond with the codes and names in the following format:
 Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code - Item Name.
-`;
+`
+    }
+  ];
  
   try {
-    // Call the OpenAI API
-    const openaiResponse = await fetch('https://api.openai.com/v1/completions', {
+    // Call the OpenAI Chat Completions API
+    const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${OPENAI_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'gpt-4-turbo',
-        prompt: prompt,
+        model: 'gpt-4', // Use 'gpt-3.5-turbo' if 'gpt-4' is not available
+        messages: messages,
         max_tokens: 150,
         temperature: 0
       })
@@ -120,7 +118,7 @@ Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code 
       return response.status(500).json({ error: data.error.message });
     }
  
-    const resultText = data.choices[0].text.trim();
+    const resultText = data.choices[0].message.content.trim();
  
     // Parse the result
     const parsedResult = parseResult(resultText);
