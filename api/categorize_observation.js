@@ -98,7 +98,7 @@ module.exports = async function handler(request, response) {
               { "code": "3a.5.3", "name": "Facility" },
               { "code": "3a.5.4", "name": "People" }
             ]
-          } // <-- Removed trailing comma
+          }
         ]
       },
       {
@@ -111,7 +111,7 @@ module.exports = async function handler(request, response) {
             "items": [
               { "code": "3B.1.1", "name": "Improper Posture" },
               { "code": "3B.1.2", "name": "Repetitive Movements" },
-              { "code": "3B.1.3", "name": "Awkward Posture" }, // Corrected typo
+              { "code": "3B.1.3", "name": "Awkward Posture" },
               { "code": "3B.1.4", "name": "Vibration" },
               { "code": "3B.1.5", "name": "Work Area Design" },
               { "code": "3B.1.6", "name": "Improper Load Handling" },
