@@ -175,7 +175,7 @@ module.exports = async function handler(request, response) {
             ]
           }
         ]
-      }
+      },
       {
   "code": "3d",
   "name": "Tools & Equipments",
@@ -541,8 +541,8 @@ module.exports = async function handler(request, response) {
       ]
     }
   ]
-}
-    ]
+} 
+  ]
   };
 
   // Convert categories JSON to text format
