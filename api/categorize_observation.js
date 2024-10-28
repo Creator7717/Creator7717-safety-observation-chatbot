@@ -33,7 +33,7 @@ module.exports = async function handler(request, response) {
 
   // Categories data embedded directly in the code
   const categoriesData = {
-    "categories": [ // <-- Removed the inner array here
+    "categories": [
       {
         "code": "3a",
         "name": "Plant Upkeep",
@@ -111,7 +111,7 @@ module.exports = async function handler(request, response) {
             "items": [
               { "code": "3B.1.1", "name": "Improper Posture" },
               { "code": "3B.1.2", "name": "Repetitive Movements" },
-              { "code": "3B.1.3", "name": "Awkward Posture" },
+              { "code": "3B.1.3", "name": "Awkward Posture" }, // Corrected typo
               { "code": "3B.1.4", "name": "Vibration" },
               { "code": "3B.1.5", "name": "Work Area Design" },
               { "code": "3B.1.6", "name": "Improper Load Handling" },
@@ -127,8 +127,56 @@ module.exports = async function handler(request, response) {
             ]
           }
         ]
+      },
+      {
+        "code": "3C",
+        "name": "Reaction of People",
+        "subcategories": [
+          {
+            "code": "3C.1",
+            "name": "Adjusting PPE",
+            "items": [
+              { "code": "3C.1.1", "name": "Adjusting PPE" }
+            ]
+          },
+          {
+            "code": "3C.2",
+            "name": "Changing Position",
+            "items": [
+              { "code": "3C.2.1", "name": "Changing Position" }
+            ]
+          },
+          {
+            "code": "3C.3",
+            "name": "Rearranging the workplace",
+            "items": [
+              { "code": "3C.3.1", "name": "Rearranging the workplace" }
+            ]
+          },
+          {
+            "code": "3C.4",
+            "name": "Stopping a job",
+            "items": [
+              { "code": "3C.4.1", "name": "Stopping a job" }
+            ]
+          },
+          {
+            "code": "3C.5",
+            "name": "Evacuation action (run & hide)",
+            "items": [
+              { "code": "3C.5.1", "name": "Evacuation action (run & hide)" }
+            ]
+          },
+          {
+            "code": "3C.6",
+            "name": "Correcting (his/her) own behaviour / work practices",
+            "items": [
+              { "code": "3C.6.1", "name": "Correcting (his/her) own behaviour / work practices" }
+            ]
+          }
+        ]
       }
-    ] // <-- Removed the inner array here
+    ]
   };
 
   // Convert categories JSON to text format
