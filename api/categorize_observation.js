@@ -1637,10 +1637,12 @@ module.exports = async function handler(request, response) {
     { "code": "3f.33.20", "name": "Level Difference on the Mine Benches" },
     { "code": "3f.33.21", "name": "Weak Bench Found Unsupported" },
     { "code": "3f.33.22", "name": "Bench Toe Found Excavated" }
-  ]
-}
-  ]
-  }
+   ]
+          }
+        ]
+      }
+    ]
+  };
       
   // Convert categories JSON to text format
   function categoriesToText(categories) {
