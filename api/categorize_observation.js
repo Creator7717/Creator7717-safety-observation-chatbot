@@ -51,13 +51,81 @@ module.exports = async function handler(request, response) {
               { "code": "3a.1.7", "name": "Polymer" }
             ]
           },
-          // Include all other subcategories and items...
-        ]
-      },
-      // Include all other categories...
-    ]
-  };
- 
+           {
+            "code": "3a.2",
+            "name": "Poor Housekeeping",
+            "items": [
+              { "code": "3a.2.1", "name": "Spillage of Material/ Waste" },
+              { "code": "3a.2.2", "name": "Job completed but material still at site" },
+              { "code": "3a.2.3", "name": "Blocked pathway/walkway/Emergency Exits" },
+              { "code": "3a.2.4", "name": "Vegetation Developed" },
+              { "code": "3a.2.5", "name": "Improper Segregation" },
+              { "code": "3a.2.6", "name": "Storm Water Drain Obstruction" }
+            ]
+          },
+          {
+            "code": "3a.3",
+            "name": "Equipment Condition",
+            "items": [
+              { "code": "3a.3.1", "name": "Dust accumulation" },
+              { "code": "3a.3.2", "name": "Spillage of Grease" },
+              { "code": "3a.3.3", "name": "Heavy vibration" },
+              { "code": "3a.3.4", "name": "High Noise" },
+              { "code": "3a.3.5", "name": "High Temperature" },
+              { "code": "3a.3.6", "name": "Light fitting in damaged condition" },
+              { "code": "3a.3.7", "name": "Missing Component" }
+            ]
+          },
+         {
+            "code": "3a.4",
+            "name": "Structure/Foundation",
+            "items": [
+              { "code": "3a.4.1", "name": "Crack in Structure" },
+              { "code": "3a.4.2", "name": "Worn Out/Rusted" },
+              { "code": "3a.4.3", "name": "Missing Component" },
+              { "code": "3a.4.4", "name": "Bent in structure" },
+              { "code": "3a.4.5", "name": "Structural Instability" },
+              { "code": "3a.4.6", "name": "Vegetation Developed" },
+              { "code": "3a.4.7", "name": "Peeling of paint/Painting" }
+            ]
+          },
+       {
+            "code": "3a.5",
+            "name": "Management of Change",
+            "items": [
+              { "code": "3a.5.1", "name": "Process" },
+              { "code": "3a.5.2", "name": "Equipment" },
+              { "code": "3a.5.3", "name": "Facility" },
+              { "code": "3a.5.4", "name": "People" },
+            ]
+          }
+      {
+        "code": "3B",
+        "name": "Position of People",
+        "subcategories": [
+          {
+            "code": "3B.1",
+            "name": "Ergonomics",
+            "items": [
+              { "code": "3b.1.1", "name": "Improper Posture" },
+              { "code": "3b.1.2", "name": "Repetitive Movements" },
+              { "code": "3b.1.3", "name": "Awkard Posture" },
+              { "code": "3b.1.4", "name": "Vibration" },
+              { "code": "3b.1.5", "name": "Work Area Design" },
+              { "code": "3b.1.6", "name": "Improper Load Handling" },
+              { "code": "3b.1.7", "name": "Bending" },
+              { "code": "3b.1.8", "name": "Twisting" },
+            ]
+          },
+               {
+            "code": "3B.2",
+            "name": "Safe Position",
+            "items": [
+              { "code": "3B.2.1", "name": "Safe Position" },
+            ]
+          },
+          
+  
   // Convert categories JSON to text format
   function categoriesToText(categories) {
     let text = '';
