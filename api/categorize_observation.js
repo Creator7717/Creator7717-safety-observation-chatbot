@@ -1905,7 +1905,9 @@ module.exports = async function handler(request, response) {
   ]
 }
   ]
-  };
+  }
+  ]
+  }
 
   // Convert categories JSON to text format
   function categoriesToText(categories) {
