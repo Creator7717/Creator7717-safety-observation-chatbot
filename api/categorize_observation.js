@@ -1644,24 +1644,7 @@ module.exports = async function handler(request, response) {
     ]
   };
       
-  // Causes data
-  const causesData = [
-    { "reference": 1, "name": "Lack of Training" },
-    { "reference": 2, "name": "No/Poor Procedure" },
-    { "reference": 3, "name": "Habitual" },
-    { "reference": 4, "name": "Lack of Concentration" },
-    { "reference": 5, "name": "Unavailable Resources" },
-    { "reference": 6, "name": "Physical Capability" },
-    { "reference": 7, "name": "Poor Design" },
-    { "reference": 8, "name": "Safe act/condition" },
-    { "reference": 9, "name": "Excess Workload" },
-    { "reference": 10, "name": "Insufficient Manpower" },
-    { "reference": 11, "name": "Improper Equipment/Tools" },
-    { "reference": 12, "name": "Ergonomic Workplace Hazards" },
-    { "reference": 13, "name": "Missing to Identify All Potential Hazards" }
-  ];
-
-  // Convert categories and causes to text format
+  // Convert categories JSON to text format
   function categoriesToText(categories) {
     let text = '';
     categories.forEach(category => {
@@ -1676,37 +1659,24 @@ module.exports = async function handler(request, response) {
     return text;
   }
 
-  function causesToText(causes) {
-    let text = '';
-    causes.forEach(cause => {
-      text += `- ${cause.reference}: ${cause.name}\n`;
-    });
-    return text;
-  }
-
   const categoriesText = categoriesToText(categoriesData.categories);
-  const causesText = causesToText(causesData);
 
   // Prepare the messages for OpenAI Chat Completion
   const messages = [
     {
       "role": "system",
-      "content": `You are an assistant that categorizes safety observations into predefined categories, subcategories, items, and identifies the most appropriate cause(s) from the provided lists.`
+      "content": `You are an assistant that categorizes safety observations into predefined categories, subcategories, and items based on the provided list.`
     },
     {
       "role": "user",
       "content": `
-Given the following safety observation: "${observation}", identify the most appropriate category, subcategory, item, and cause(s) from the provided lists.
+Given the following safety observation: "${observation}", identify the most appropriate category, subcategory, and item from the provided list.
 
 Categories:
 ${categoriesText}
 
-Causes:
-${causesText}
-
 Respond with the codes and names in the following format:
-Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code - Item Name
-Cause Reference(s) - Cause Name(s)
+Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code - Item Name.
 `
     }
   ];
@@ -1722,7 +1692,7 @@ Cause Reference(s) - Cause Name(s)
       body: JSON.stringify({
         model: 'gpt-4o', // Use 'gpt-3.5-turbo' if 'gpt-4' is not available
         messages: messages,
-        max_tokens: 200,
+        max_tokens: 150,
         temperature: 0
       })
     });
@@ -1748,20 +1718,18 @@ Cause Reference(s) - Cause Name(s)
 
 // Function to parse the OpenAI response into structured data
 function parseResult(resultText) {
-  // Split the result into two parts: category and cause
-  const [categoryPart, causePart] = resultText.split('\n').map(part => part.trim());
+  // Expected format:
+  // Category Code - Category Name > Subcategory Code - Subcategory Name > Item Code - Item Name
 
-  // Parse category information
-  let categoryData = {};
-  const categoryParts = categoryPart.split('>');
-  if (categoryParts.length === 3) {
-    const [catPart, subcatPart, itemPart] = categoryParts.map(part => part.trim());
+  const parts = resultText.split('>');
+  if (parts.length === 3) {
+    const [categoryPart, subcategoryPart, itemPart] = parts.map(part => part.trim());
 
-    const [categoryCode, categoryName] = catPart.split('-', 2).map(str => str.trim());
-    const [subcategoryCode, subcategoryName] = subcatPart.split('-', 2).map(str => str.trim());
+    const [categoryCode, categoryName] = categoryPart.split('-', 2).map(str => str.trim());
+    const [subcategoryCode, subcategoryName] = subcategoryPart.split('-', 2).map(str => str.trim());
     const [itemCode, itemName] = itemPart.split('-', 2).map(str => str.trim());
 
-    categoryData = {
+    return {
       categoryCode,
       categoryName,
       subcategoryCode,
@@ -1771,20 +1739,6 @@ function parseResult(resultText) {
     };
   } else {
     // If the format is unexpected, return the raw text
-    categoryData = { rawResult: resultText };
+    return { rawResult: resultText };
   }
-
-  // Parse cause information
-  let causeData = {};
-  if (causePart) {
-    const [causeReferences, causeNames] = causePart.split('-', 2).map(str => str.trim());
-    causeData = {
-      causeReferences,
-      causeNames
-    };
-  } else {
-    causeData = { causeRawResult: causePart };
-  }
-
-  return { ...categoryData, ...causeData };
 }
