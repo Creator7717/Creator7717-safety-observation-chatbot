@@ -1720,7 +1720,7 @@ Cause Reference(s) - Cause Name(s)
         'Authorization': `Bearer ${OPENAI_API_KEY}`
       },
       body: JSON.stringify({
-        model: 'gpt-4', // Use 'gpt-3.5-turbo' if 'gpt-4' is not available
+        model: 'gpt-4o', // Use 'gpt-3.5-turbo' if 'gpt-4' is not available
         messages: messages,
         max_tokens: 200,
         temperature: 0
